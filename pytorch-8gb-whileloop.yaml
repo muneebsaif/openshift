@@ -1,0 +1,279 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: workload-pytorch-8gb-while-loop
+  namespace: rehmat
+  uid: 3cf82a6e-df6d-4706-aed5-cc10ffc4694e
+  resourceVersion: '50783672'
+  creationTimestamp: '2025-07-15T18:24:00Z'
+  annotations:
+    k8s.ovn.org/pod-networks: '{"default":{"ip_addresses":["10.128.1.94/23"],"mac_address":"0a:58:0a:80:01:5e","gateway_ips":["10.128.0.1"],"routes":[{"dest":"10.128.0.0/14","nextHop":"10.128.0.1"},{"dest":"172.30.0.0/16","nextHop":"10.128.0.1"},{"dest":"169.254.0.5/32","nextHop":"10.128.0.1"},{"dest":"100.64.0.0/16","nextHop":"10.128.0.1"}],"ip_address":"10.128.1.94/23","gateway_ip":"10.128.0.1","role":"primary"}}'
+    k8s.v1.cni.cncf.io/network-status: |-
+      [{
+          "name": "ovn-kubernetes",
+          "interface": "eth0",
+          "ips": [
+              "10.128.1.94"
+          ],
+          "mac": "0a:58:0a:80:01:5e",
+          "default": true,
+          "dns": {}
+      }]
+    openshift.io/scc: anyuid
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: v1
+      time: '2025-07-15T18:24:00Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:nodeName': {}
+          'f:volumes':
+            .: {}
+            'k:{"name":"kube-api-access"}':
+              .: {}
+              'f:name': {}
+              'f:projected':
+                .: {}
+                'f:defaultMode': {}
+                'f:sources': {}
+          'f:containers':
+            'k:{"name":"pytorch"}':
+              'f:image': {}
+              'f:volumeMounts':
+                .: {}
+                'k:{"mountPath":"/var/run/secrets/kubernetes.io/serviceaccount"}':
+                  .: {}
+                  'f:mountPath': {}
+                  'f:name': {}
+                  'f:readOnly': {}
+              'f:terminationMessagePolicy': {}
+              .: {}
+              'f:resources':
+                .: {}
+                'f:limits':
+                  .: {}
+                  'f:nvidia.com/gpu': {}
+                'f:requests':
+                  .: {}
+                  'f:nvidia.com/gpu': {}
+              'f:args': {}
+              'f:command': {}
+              'f:securityContext':
+                .: {}
+                'f:capabilities':
+                  .: {}
+                  'f:drop': {}
+              'f:terminationMessagePath': {}
+              'f:imagePullPolicy': {}
+              'f:name': {}
+          'f:dnsPolicy': {}
+          'f:tolerations': {}
+          'f:serviceAccount': {}
+          'f:restartPolicy': {}
+          'f:schedulerName': {}
+          'f:terminationGracePeriodSeconds': {}
+          'f:imagePullSecrets':
+            .: {}
+            'k:{"name":"default-dockercfg-wxrrb"}': {}
+            'k:{"name":"ngc-secret"}': {}
+            'k:{"name":"registry.redhat.io"}': {}
+          'f:serviceAccountName': {}
+          'f:enableServiceLinks': {}
+          'f:securityContext': {}
+    - manager: aipod-gpu
+      operation: Update
+      apiVersion: v1
+      time: '2025-07-15T18:24:00Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:k8s.ovn.org/pod-networks': {}
+      subresource: status
+    - manager: kubelet
+      operation: Update
+      apiVersion: v1
+      time: '2025-07-15T18:24:01Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:conditions':
+            .: {}
+            'k:{"type":"ContainersReady"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Initialized"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"PodReadyToStartContainers"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"PodScheduled"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Ready"}':
+              .: {}
+              'f:lastProbeTime': {}
+              'f:lastTransitionTime': {}
+              'f:status': {}
+              'f:type': {}
+          'f:containerStatuses': {}
+          'f:hostIP': {}
+          'f:hostIPs': {}
+          'f:phase': {}
+          'f:podIP': {}
+          'f:podIPs':
+            .: {}
+            'k:{"ip":"10.128.1.94"}':
+              .: {}
+              'f:ip': {}
+          'f:startTime': {}
+      subresource: status
+    - manager: multus-daemon
+      operation: Update
+      apiVersion: v1
+      time: '2025-07-15T18:24:01Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:k8s.v1.cni.cncf.io/network-status': {}
+      subresource: status
+spec:
+  restartPolicy: Never
+  serviceAccountName: default
+  imagePullSecrets:
+    - name: default-dockercfg-wxrrb
+    - name: registry.redhat.io
+    - name: ngc-secret
+  priority: 0
+  schedulerName: default-scheduler
+  enableServiceLinks: true
+  terminationGracePeriodSeconds: 30
+  preemptionPolicy: PreemptLowerPriority
+  nodeName: aipod-gpu
+  securityContext:
+    seLinuxOptions:
+      level: 's0:c27,c19'
+  containers:
+    - resources:
+        limits:
+          nvidia.com/gpu: '1'
+        requests:
+          nvidia.com/gpu: '1'
+      terminationMessagePath: /dev/termination-log
+      name: pytorch
+      command:
+        - python3
+      securityContext:
+        capabilities:
+          drop:
+            - MKNOD
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: kube-api-access
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      terminationMessagePolicy: File
+      image: 'pytorch/pytorch:2.2.0-cuda11.8-cudnn8-runtime'
+      args:
+        - '-c'
+        - "import torch, time\nprint(\"\U0001F9E0 PyTorch GPU:\", torch.cuda.is_available())\na = torch.randn(13000, 13000, device='cuda')\ni = 0\nwhile True:\n    a = torch.matmul(a, a)\n    time.sleep(1)\n    i += 1\n"
+  serviceAccount: default
+  volumes:
+    - name: kube-api-access
+      projected:
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              name: kube-root-ca.crt
+              items:
+                - key: ca.crt
+                  path: ca.crt
+          - downwardAPI:
+              items:
+                - path: namespace
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+          - configMap:
+              name: openshift-service-ca.crt
+              items:
+                - key: service-ca.crt
+                  path: service-ca.crt
+        defaultMode: 420
+  dnsPolicy: ClusterFirst
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+status:
+  containerStatuses:
+    - restartCount: 0
+      started: true
+      ready: true
+      name: pytorch
+      state:
+        running:
+          startedAt: '2025-07-15T18:24:01Z'
+      volumeMounts:
+        - name: kube-api-access
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          readOnly: true
+          recursiveReadOnly: Disabled
+      imageID: 'docker.io/pytorch/pytorch@sha256:4912bdff05d435ad0bf2f7cff3f25589832ea9968cd8b5470343b16d1f23f42f'
+      image: 'docker.io/pytorch/pytorch:2.2.0-cuda11.8-cudnn8-runtime'
+      lastState: {}
+      containerID: 'cri-o://94d5d88070c83e733aade4fbf83d3fecbf42f6222a160cb35f799530dc6f5afe'
+  qosClass: BestEffort
+  hostIPs:
+    - ip: 172.16.0.210
+  podIPs:
+    - ip: 10.128.1.94
+  podIP: 10.128.1.94
+  hostIP: 172.16.0.210
+  startTime: '2025-07-15T18:24:00Z'
+  conditions:
+    - type: PodReadyToStartContainers
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2025-07-15T18:24:01Z'
+    - type: Initialized
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2025-07-15T18:24:00Z'
+    - type: Ready
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2025-07-15T18:24:01Z'
+    - type: ContainersReady
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2025-07-15T18:24:01Z'
+    - type: PodScheduled
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2025-07-15T18:24:00Z'
+  phase: Running
+
