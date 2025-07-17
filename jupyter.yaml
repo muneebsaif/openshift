@@ -1,0 +1,213 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: jupyter-pytorch
+  namespace: rehmat
+  uid: 34638c74-0ec8-4c3f-ab0a-ee82d47d6e55
+  resourceVersion: '52879068'
+  generation: 7
+  creationTimestamp: '2025-07-16T19:58:23Z'
+  annotations:
+    deployment.kubernetes.io/revision: '5'
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: apps/v1
+      time: '2025-07-17T11:36:01Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:progressDeadlineSeconds': {}
+          'f:revisionHistoryLimit': {}
+          'f:selector': {}
+          'f:strategy':
+            'f:rollingUpdate':
+              .: {}
+              'f:maxSurge': {}
+              'f:maxUnavailable': {}
+            'f:type': {}
+          'f:template':
+            'f:metadata':
+              'f:labels':
+                .: {}
+                'f:app': {}
+            'f:spec':
+              'f:containers':
+                'k:{"name":"jupyter"}':
+                  'f:image': {}
+                  'f:volumeMounts':
+                    .: {}
+                    'k:{"mountPath":"/workspace"}':
+                      .: {}
+                      'f:mountPath': {}
+                      'f:name': {}
+                  'f:terminationMessagePolicy': {}
+                  .: {}
+                  'f:workingDir': {}
+                  'f:resources':
+                    .: {}
+                    'f:limits':
+                      .: {}
+                      'f:nvidia.com/gpu': {}
+                  'f:env':
+                    .: {}
+                    'k:{"name":"HOME"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                    'k:{"name":"JUPYTER_RUNTIME_DIR"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                    'k:{"name":"NB_USER"}':
+                      .: {}
+                      'f:name': {}
+                      'f:value': {}
+                  'f:terminationMessagePath': {}
+                  'f:imagePullPolicy': {}
+                  'f:ports':
+                    .: {}
+                    'k:{"containerPort":8888,"protocol":"TCP"}':
+                      .: {}
+                      'f:containerPort': {}
+                      'f:protocol': {}
+                  'f:name': {}
+              'f:dnsPolicy': {}
+              'f:restartPolicy': {}
+              'f:schedulerName': {}
+              'f:securityContext': {}
+              'f:terminationGracePeriodSeconds': {}
+              'f:volumes':
+                .: {}
+                'k:{"name":"jupyter-storage"}':
+                  .: {}
+                  'f:name': {}
+                  'f:persistentVolumeClaim':
+                    .: {}
+                    'f:claimName': {}
+    - manager: kubectl-patch
+      operation: Update
+      apiVersion: apps/v1
+      time: '2025-07-17T13:07:51Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:template':
+            'f:spec':
+              'f:containers':
+                'k:{"name":"jupyter"}':
+                  'f:args': {}
+                  'f:command': {}
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: apps/v1
+      time: '2025-07-17T13:07:54Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:deployment.kubernetes.io/revision': {}
+        'f:status':
+          'f:availableReplicas': {}
+          'f:conditions':
+            .: {}
+            'k:{"type":"Available"}':
+              .: {}
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Progressing"}':
+              .: {}
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+          'f:observedGeneration': {}
+          'f:readyReplicas': {}
+          'f:replicas': {}
+          'f:updatedReplicas': {}
+      subresource: status
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-pytorch
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: jupyter-pytorch
+    spec:
+      volumes:
+        - name: jupyter-storage
+          persistentVolumeClaim:
+            claimName: jupyter-pvc
+      containers:
+        - resources:
+            limits:
+              nvidia.com/gpu: '1'
+          terminationMessagePath: /dev/termination-log
+          name: jupyter
+          command:
+            - start-notebook.sh
+          env:
+            - name: JUPYTER_RUNTIME_DIR
+              value: /workspace/.jupyter_runtime
+            - name: HOME
+              value: /workspace
+            - name: NB_USER
+              value: jovyan
+          ports:
+            - containerPort: 8888
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: jupyter-storage
+              mountPath: /workspace
+          terminationMessagePolicy: File
+          image: 'jupyter/tensorflow-notebook:x86_64-ubuntu-22.04'
+          workingDir: /workspace
+          args:
+            - '--NotebookApp.token='''''
+            - '--NotebookApp.password='''''
+            - '--NotebookApp.allow_origin=''*'''
+            - '--NotebookApp.ip=0.0.0.0'
+            - '--NotebookApp.port=8888'
+            - '--NotebookApp.allow_root=True'
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 7
+  replicas: 1
+  updatedReplicas: 1
+  readyReplicas: 1
+  availableReplicas: 1
+  conditions:
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2025-07-17T11:37:48Z'
+      lastTransitionTime: '2025-07-17T11:37:48Z'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2025-07-17T13:07:54Z'
+      lastTransitionTime: '2025-07-16T19:58:23Z'
+      reason: NewReplicaSetAvailable
+      message: ReplicaSet "jupyter-pytorch-f6467ff44" has successfully progressed.
